@@ -2,13 +2,18 @@ import { useSelector, useDispatch } from "react-redux"
 import { addVote } from '../reducers/anecdoteReducer'
 
 const AnecdoteList = () => {
-    const anecdotes = useSelector(state => state)
+    const anecdotes = useSelector(({anecdotes, filter}) => 
+      anecdotes.filter(anecdote => (anecdote.content.toLowerCase()).includes(filter.toLowerCase())))
     const dispatch = useDispatch()
-  
+
+    const emptyMessage = <strong>Nothing to see here...</strong>
+
+    
     return (
-    <>
-      <h2>Anecdotes</h2>
-      {anecdotes.map((anecdote) => (
+    <div>
+      {anecdotes.length === 0
+        ? emptyMessage
+        : (anecdotes.map((anecdote) => 
         <div key={anecdote.id}>
           <div>{anecdote.content}</div>
           <div>
@@ -19,7 +24,7 @@ const AnecdoteList = () => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

@@ -21,7 +21,7 @@ const initialState = anecdotesAtStart.map(asObject);
 //Obtaining the initial set of anecdotes ^^^
 
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case "ADD_VOTE":
@@ -59,4 +59,4 @@ export const addVote =(id)=>{
     payload: {id}}
 }
 
-export default reducer;
+export default anecdoteReducer;
