@@ -1,4 +1,4 @@
-import reducer from "./anecdoteReducer";
+import anecdoteReducer from "./anecdoteReducer";
 import deepFreeze from "deep-freeze";
 
 describe("anecdoteReducer", () => {
@@ -12,11 +12,11 @@ describe("anecdoteReducer", () => {
     ];
 
     const action = {
-      type: "ADD_VOTE",
+      type: "anecdotes/addVote",
       payload: { id: 5 }
     };
     deepFreeze(state)
-    const newState = reducer(state, action);
+    const newState = anecdoteReducer(state, action);
     expect(newState[0].votes).toEqual(1);
   });
 
