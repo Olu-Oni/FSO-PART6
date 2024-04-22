@@ -1,23 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit"
 
-const shortenString = (value, length) =>{
+export const shortenString = (value, length) =>{
     if(value.length > length){   
         value = value.slice(0,length)
         const array = value.split('')
-        value = value.slice(0,array.lastIndexOf(' ')) + '...'
+        value = value.slice(0,array.lastIndexOf(' ')) + "...'"
     }
     return value
 }
+
 const notificationSlice = createSlice({
     name:"notification",
-    initialState:"Welcome",
+    initialState:"",
     reducers:{
-        voteNotification(state, action){
-           return `you voted '${shortenString(action.payload, 30)}'`
-        },
-        annecNotification(state, action){
-            return `you created '${shortenString(action.payload, 30)}'`
-        },
+        setNotification(state, action){
+            return action.payload
+         },
         rmNotification(state){
             state = ''
             return state
@@ -25,6 +23,20 @@ const notificationSlice = createSlice({
     }
 })
 
+let timerID
+export const newNotification = (content, time,amount) =>{
+    return async (dispatch) =>{
+        
+        const timer = () => {
+             timerID = setTimeout(()=>dispatch(rmNotification()), time*1000)
+        }
+        
+        clearTimeout(timerID); // Clear the previous timeout if it exists
+        
+        dispatch(setNotification(`${shortenString(content, amount)}`))
+        timer()
+    }
+}
 
 export default notificationSlice.reducer
-export const {voteNotification, annecNotification, rmNotification} = notificationSlice.actions
+export const {setNotification,voteNotification, anecNotification, rmNotification} = notificationSlice.actions

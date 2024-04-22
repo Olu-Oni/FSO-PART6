@@ -1,39 +1,41 @@
-import { useSelector, useDispatch } from "react-redux"
-import { addVote } from '../reducers/anecdoteReducer'
-import { voteNotification } from "../reducers/notificationReducer";
+import { useSelector, useDispatch } from "react-redux";
+import { newVote } from "../reducers/anecdoteReducer";
+import { newNotification } from "../reducers/notificationReducer";
 
 const AnecdoteList = () => {
-    const anecdotes = useSelector(({anecdotes, filter}) => {
-      if (filter === ""){
-        return anecdotes
-      }
-      return anecdotes.filter(anecdote => (anecdote.content.toLowerCase()).includes(filter.toLowerCase()))
-    })
-    
-    const dispatch = useDispatch()
-
-    const emptyMessage = <strong>Nothing to see here...</strong>
-
-    const handleClick = (value) =>{
-      dispatch(addVote(value))
-      dispatch(voteNotification(value.content))
+  let anecdotes = useSelector(({ anecdotes, filter }) => {
+    if (filter === "") {
+      return anecdotes;
     }
+    return anecdotes.filter((anecdote) =>
+      anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    );
+  });
 
-    return (
+  const dispatch = useDispatch();
+
+  const emptyMessage = <strong>Nothing to see here...</strong>;
+
+  const handleClick = (anecdote) => {
+    dispatch(newVote(anecdote));
+    dispatch(newNotification(`you voted for '${anecdote.content}'`, 5, 45));
+  };
+
+  return (
     <div>
       {anecdotes.length === 0
         ? emptyMessage
-        : (anecdotes.map((anecdote) => 
-        <div key={anecdote.id}>
-          <div>{anecdote.content}</div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleClick(anecdote)}>vote</button>
-            <br />
-            <br />
-          </div>
-        </div>
-      ))}
+        : anecdotes.map((anecdote) => (
+            <div key={anecdote.id}>
+              <div>{anecdote.content}</div>
+              <div>
+                has {anecdote.votes}
+                <button onClick={() => handleClick(anecdote)}>vote</button>
+                <br />
+                <br />
+              </div>
+            </div>
+          ))}
     </div>
   );
 };
